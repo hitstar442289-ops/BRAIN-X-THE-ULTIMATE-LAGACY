@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRAIN-X: THE ULTIMATE LEGACY</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3106/3106856.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+        
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background: #020617; 
+            color: #e2e8f0; 
+            overflow: hidden;
+            background-image: radial-gradient(circle at 15% 15%, #1e40af 0%, transparent 35%), radial-gradient(circle at 85% 85%, #581c87 0%, transparent 35%); 
+        }
+
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        .neon-card { 
+            background: rgba(15, 23, 42, 0.9); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .option-btn { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .option-btn:hover { 
+            background: linear-gradient(135deg, #2563eb, #7c3aed); 
+            transform: translateY(-3px) scale(1.02);
+            border-color: transparent;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .hidden { display: none; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .status-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse-glow 1.5s infinite; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="app-container" class="w-full max-w-xl neon-card rounded-[3.5rem] p-10 md:p-14 text-center relative border border-white/5">
+        
+        <!-- Welcome Screen -->
+        <div id="start-screen" class="space-y-8">
+            <div class="relative inline-block mb-2">
+                <div class="absolute -inset-4 bg-blue-500/20 blur-xl rounded-full"></div>
+                <span class="text-7xl relative">🧠</span>
+            </div>
+            
+            <div>
+                <h1 class="orbitron text-4xl md:text-5xl font-black text-white tracking-tighter leading-none mb-2">
+                    BRAIN-<span class="text-blue-500">X</span>
+                </h1>
+                <p class="text-blue-400 font-bold text-xs uppercase tracking-[0.5em]">THE ULTIMATE LEGACY</p>
+            </div>
+            
+            <div class="bg-black/40 p-6 rounded-3xl border border-white/5">
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <div class="status-dot"></div>
+                    <span class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Unique System Online</span>
+                </div>
+                <p id="remaining-count" class="text-5xl font-black text-white">--</p>
+                <p class="text-[10px] text-blue-500 mt-2 font-bold uppercase tracking-widest">Questions Remaining / Sawal Baaki Hain</p>
+            </div>
+
+            <button onclick="initLegacy()" class="orbitron w-full bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl font-black text-xl shadow-[0_15px_30px_rgba(37,99,235,0.4)] transition-all active:scale-95">
+                ENGAGE MISSION
+            </button>
+            
+            <p class="text-gray-600 text-[10px] uppercase tracking-widest italic pt-4">
+                PWA Enabled • Bilingual AI • Anti-Repeat Protection
+            </p>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden text-left">
+            <div class="flex justify-between items-center mb-10">
+                <div class="orbitron text-[10px] text-gray-500 uppercase tracking-widest">Phase: <span id="q-num" class="text-blue-400">01</span>/05</div>
+                <div id="timer" class="orbitron text-2xl font-black text-white px-5 py-2 bg-blue-900/40 rounded-2xl border border-blue-500/20">15s</div>
+            </div>
+            
+            <div class="mb-12">
+                <h2 id="q-eng" class="text-2xl md:text-3xl font-bold text-white leading-tight"></h2>
+                <h2 id="q-hin" class="text-lg md:text-xl font-medium text-blue-400/80 mt-5 italic leading-snug"></h2>
+            </div>
+
+            <div id="options-container" class="grid grid-cols-1 gap-4"></div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden">
+            <p class="orbitron text-xs text-blue-400 tracking-[0.6em] mb-4 uppercase">Legacy Status Generated</p>
+            <p class="orbitron text-9xl font-black text-white mb-2" id="iq-score">0</p>
+            <h3 id="iq-level" class="text-2xl font-bold text-blue-400 mb-12 tracking-widest uppercase">---</h3>
+            <button onclick="location.reload()" class="orbitron w-full bg-gradient-to-r from-blue-600 to-indigo-700 py-6 rounded-2xl font-black text-xl shadow-2xl transition-all">
+                NEXT EVOLUTION
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Service Worker registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            });
+        }
+
+        // Master Question Pool with Bilingual Support
+        const legacyBank = [
+            { id: "L01", qE: "If 1=5, 2=25, 3=125, then 5=?", qH: "Agar 1=5, 2=25, 3=125 hai, toh 5=?", a: ["625", "1", "3125", "25"], c: 1 },
+            { id: "L02", qE: "A farmer has 17 sheep, all but 9 die. How many are left?", qH: "Ek kisan ke paas 17 bhedein thi, 9 ko chhod sab mar gayi. Kitni bachi?", a: ["8", "9", "0", "17"], c: 1 },
+            { id: "L03", qE: "Which month of the year has 28 days?", qH: "Saal ke kaunse mahine mein 28 din hote hain?", a: ["February", "All of them", "March", "None"], c: 1 },
+            { id: "L04", qE: "Series: 1, 1, 2, 3, 5, 8, ?", qH: "Series ko pura karein: 1, 1, 2, 3, 5, 8, ?", a: ["10", "12", "13", "15"], c: 2 },
+            { id: "L05", qE: "Which of these animals cannot fly?", qH: "Inme se kaunsa janwar udd nahi sakta?", a: ["Bat", "Parrot", "Penguin", "Crow"], c: 2 },
+            { id: "L06", qE: "How many seconds are in 1 hour?", qH: "Ek ghante mein kitne seconds hote hain?", a: ["60", "360", "3600", "600"], c: 2 },
+            { id: "L07", qE: "If yesterday was Sunday, what day will it be in 3 days?", qH: "Agar kal Itwar tha, toh 3 din baad kaunsa din hoga?", a: ["Wednesday", "Thursday", "Friday", "Tuesday"], c: 0 },
+            { id: "L08", qE: "10 + 10 × 0 + 10 = ?", qH: "10 + 10 × 0 + 10 ka sahi jawab kya hai?", a: ["10", "20", "0", "30"], c: 1 },
+            { id: "L09", qE: "What is the 5th letter from the right in ABCD?", qH: "Alphabet (Z se piche) mein 5wa letter kaunsa hai?", a: ["V", "U", "W", "X"], c: 0 },
+            { id: "L10", qE: "Water is to Ice as Milk is to ___?", qH: "Paani ka rishta baraf se hai, toh doodh ka kisse hai?", a: ["Tea", "Curd (Dahi)", "Coffee", "Juice"], c: 1 }
+        ];
+
+        let activeSet = [];
+        let currentIdx = 0;
+        let score = 0;
+        let timer;
+
+        // Permanent Memory Logic (Anti-Repeat)
+        function getSeenNodes() { return JSON.parse(localStorage.getItem('brainx_legacy_nodes') || "[]"); }
+        function saveNode(id) {
+            const seen = getSeenNodes();
+            if(!seen.includes(id)) { seen.push(id); localStorage.setItem('brainx_legacy_nodes', JSON.stringify(seen)); }
+        }
+
+        function updateRemainingDisplay() {
+            const seen = getSeenNodes();
+            const remaining = legacyBank.filter(q => !seen.includes(q.id)).length;
+            document.getElementById('remaining-count').innerText = remaining;
+            
+            // Auto-refresh when bank is exhausted
+            if (remaining === 0 && legacyBank.length > 0) {
+                localStorage.removeItem('brainx_legacy_nodes');
+                location.reload();
+            }
+        }
+
+        window.onload = updateRemainingDisplay;
+
+        function initLegacy() {
+            const seen = getSeenNodes();
+            const available = legacyBank.filter(q => !seen.includes(q.id));
+            
+            activeSet = available.sort(() => Math.random() - 0.5).slice(0, 5);
+            
+            if (activeSet.length === 0) return;
+
+            currentIdx = 0;
+            score = 0;
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            loadPhase();
+        }
+
+        function loadPhase() {
+            if (currentIdx >= activeSet.length) { 
+                finalizeAssessment(); 
+                return; 
+            }
+
+            const qData = activeSet[currentIdx];
+            saveNode(qData.id); // Block permanently
+
+            document.getElementById('q-num').innerText = (currentIdx + 1).toString().padStart(2, '0');
+            document.getElementById('q-eng').innerText = qData.qE;
+            document.getElementById('q-hin').innerText = qData.qH;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            qData.a.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full text-left p-6 rounded-2xl text-lg font-bold orbitron text-white";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if (i === qData.c) score++;
+                    currentIdx++;
+                    loadPhase();
+                };
+                container.appendChild(btn);
+            });
+
+            startLegacyTimer();
+        }
+
+        function startLegacyTimer() {
+            let time = 15;
+            clearInterval(timer);
+            const timerUI = document.getElementById('timer');
+            timerUI.innerText = time + 's';
+            timerUI.style.color = 'white';
+
+            timer = setInterval(() => {
+                time--;
+                timerUI.innerText = time + 's';
+                if(time <= 5) timerUI.style.color = '#ef4444';
+                if (time <= 0) {
+                    clearInterval(timer);
+                    currentIdx++;
+                    loadPhase();
+                }
+            }, 1000);
+        }
+
+        function finalizeAssessment() {
+            clearInterval(timer);
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            const iq = 80 + (score * 12);
+            
+            let val = 0;
+            const anim = setInterval(() => {
+                if(val >= iq) clearInterval(anim);
+                document.getElementById('iq-score').innerText = val;
+                val++;
+            }, 30);
+
+            document.getElementById('iq-level').innerText = iq >= 120 ? "ULTIMATE GENIUS" : "ELITE CORE";
+            updateRemainingDisplay();
+        }
+    </script>
+</body>
+</html>
+
